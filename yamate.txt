@@ -1443,10 +1443,18 @@ Window = Fluent:CreateWindow({
     Theme = "Light",
     MinimizeKey = Enum.KeyCode.LeftControl 
 })
-Info = Window:AddTab({ Title = "Info", Icon = "" })
-Time = Server:AddParagraph({
-    Title = "Info Qminh (Kenny)",
-    Content = ""
+Info = Window:AddTab({ Title = "Tab Info", Icon = "" })
+Info:AddButton({
+    Title = "Discord",
+    Callback = function()
+        setclipboard("https://discord.gg/d9AH96mJcc")
+    end
+})
+Info:AddButton({
+    Title = "Shop Roblox",
+    Callback = function()
+        setclipboard("https://shoproblox29.cfd/")
+    end
 })
 Shop = Window:AddTab({ Title = "Tab Shop", Icon = "" })
 sex = {
@@ -8135,19 +8143,6 @@ Input = PVP:AddInput("Input", {
      Callback = function(Value)
          getgenv().WalkSpeed = Value
      end
-})
-Info = Window:AddTab({ Title = "Tab Info", Icon = "" })
-Info:AddButton({
-    Title = "Discord",
-    Callback = function()
-        setclipboard("https://discord.gg/d9AH96mJcc")
-    end
-})
-Info:AddButton({
-    Title = "Shop Roblox",
-    Callback = function()
-        setclipboard("https://shoproblox29.cfd/")
-    end
 })
 ----------------------------------------------------------------------------------------------------
 game.StarterGui:SetCore("SendNotification", {
