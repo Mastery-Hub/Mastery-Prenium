@@ -1,58 +1,5 @@
-local executor = getexecutorname() or identifyexecutor()
-
-if executor then
-    local supportedExecutors = {
-        "Velocity",
-        "Wave",
-        "Arceus",
-        "Swift",
-        "AWP",
-        "Macsploit",
-        "Delta",
-        "Fluxus",
-        "CodeX",
-        "Krnl",
-        "Trigon",
-        "Evon",
-        "Cryptic",
-        "SynapeX",
-        "Potassium",
-        "Argon",
-        "Xeno",
-        "Nezur",
-        "Revelix",
-        "Cubix",
-        "Solara",
-        "Dynamic",
-        "Nebula",
-        "Ronix",
-        "Atlantis",
-        "JJsploit",
-        "Frostware"
-    }
-
-    local isExecutorSupported = false
-    for _, name in ipairs(supportedExecutors) do
-        if string.find(executor, name) then
-            isExecutorSupported = true
-            break
-        end
-    end
-
-    if isExecutorSupported then
-        print("Supported Executor!")
-    else
-        game.Players.LocalPlayer:Kick("Not supported TNG Skid executor!")
-    end
-end
-
-repeat
-    wait()
-until game:IsLoaded() and game.Players.LocalPlayer
-
--- Danh sách các khóa hợp lệ
 local keys = {
-     ["df3be29b-3649-4bc2-b4e5-7c7e36228179"] = true,
+    ["df3be29b-3649-4bc2-b4e5-7c7e36228179"] = true,
     ["383e652d-67c8-4693-b6a4-53a8bfe33f88"] = true,
     ["c67200ef-e754-4722-8b16-b76311693c4d"] = true,
     ["ad475863-da4f-4358-81a5-69a0fef5bb76"] = true,
@@ -104,10 +51,273 @@ local keys = {
     ["34f449c9-e276-4e05-beee-f4e4cefe2282"] = true
 }
 
+
 -- Kiểm tra xem Key có tồn tại và hợp lệ không
 if getgenv().Key and keys[getgenv().Key] then
     print("Whitelist success!")
-    
+-- Roblox Key System UI Script
+-- This script creates a user interface for a key system in Roblox
+
+-- Setup variables and services
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+-- Configuration
+local CONFIG = {
+	KEYS = {
+		
+	},
+	MAX_ATTEMPTS = 3,
+	REMOTE_EVENT_NAME = "ValidateKey" -- Change this to match your RemoteEvent name
+}
+
+-- Create RemoteEvent if it doesn't exist (for testing purposes)
+-- In a real game, this should be created on the server
+local ValidateKeyEvent = ReplicatedStorage:FindFirstChild(CONFIG.REMOTE_EVENT_NAME)
+if not ValidateKeyEvent then
+	ValidateKeyEvent = Instance.new("RemoteEvent")
+	ValidateKeyEvent.Name = CONFIG.REMOTE_EVENT_NAME
+	ValidateKeyEvent.Parent = ReplicatedStorage
+end
+
+-- Create the UI
+local function createKeySystemUI()
+	-- Create ScreenGui
+	local KeySystemGui = Instance.new("ScreenGui")
+	KeySystemGui.Name = "KeySystemGui"
+	KeySystemGui.ResetOnSpawn = false
+	KeySystemGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	KeySystemGui.Parent = PlayerGui
+	
+	-- Create main frame
+	local MainFrame = Instance.new("Frame")
+	MainFrame.Name = "MainFrame"
+	MainFrame.Size = UDim2.new(0, 400, 0, 250)
+	MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+	MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	MainFrame.BorderSizePixel = 0
+	MainFrame.ClipsDescendants = true
+	MainFrame.Parent = KeySystemGui
+	
+	-- Add corner radius
+	local UICorner = Instance.new("UICorner")
+	UICorner.CornerRadius = UDim.new(0, 8)
+	UICorner.Parent = MainFrame
+	
+	-- Add shadow
+	local Shadow = Instance.new("ImageLabel")
+	Shadow.Name = "Shadow"
+	Shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+	Shadow.BackgroundTransparency = 1
+	Shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+	Shadow.Size = UDim2.new(1, 40, 1, 40)
+	Shadow.ZIndex = -1
+	Shadow.Image = "rbxassetid:// 5028857084"
+	Shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+	Shadow.ImageTransparency = 0.5
+	Shadow.Parent = MainFrame
+	
+	-- Create title
+	local TitleLabel = Instance.new("TextLabel")
+	TitleLabel.Name = "TitleLabel"
+	TitleLabel.Size = UDim2.new(1, 0, 0, 40)
+	TitleLabel.BackgroundTransparency = 1
+	TitleLabel.Position = UDim2.new(0, 0, 0, 10)
+	TitleLabel.Font = Enum.Font.GothamBold
+	TitleLabel.Text = "Mastery Hub Key System"
+	TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+	TitleLabel.TextSize = 24
+	TitleLabel.Parent = MainFrame
+	
+	-- Create subtitle
+	local SubtitleLabel = Instance.new("TextLabel")
+	SubtitleLabel.Name = "SubtitleLabel"
+	SubtitleLabel.Size = UDim2.new(1, 0, 0, 20)
+	SubtitleLabel.BackgroundTransparency = 1
+	SubtitleLabel.Position = UDim2.new(0, 0, 0, 45)
+	SubtitleLabel.Font = Enum.Font.Gotham
+	SubtitleLabel.Text = "Please enter the key to access this script"
+	SubtitleLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+	SubtitleLabel.TextSize = 14
+	SubtitleLabel.Parent = MainFrame
+	
+	-- Create key input box
+	local KeyInput = Instance.new("TextBox")
+	KeyInput.Name = "KeyInput"
+	KeyInput.Size = UDim2.new(0.8, 0, 0, 40)
+	KeyInput.Position = UDim2.new(0.1, 0, 0, 85)
+	KeyInput.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	KeyInput.BorderSizePixel = 0
+	KeyInput.Font = Enum.Font.Gotham
+	KeyInput.PlaceholderText = "Enter Key Here..."
+	KeyInput.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
+	KeyInput.Text = ""
+	KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+	KeyInput.TextSize = 14
+	KeyInput.ClearTextOnFocus = false
+	KeyInput.Parent = MainFrame
+	
+	-- Add corner radius to input
+	local InputCorner = Instance.new("UICorner")
+	InputCorner.CornerRadius = UDim.new(0, 6)
+	InputCorner.Parent = KeyInput
+	
+	-- Create status label
+	local StatusLabel = Instance.new("TextLabel")
+	StatusLabel.Name = "StatusLabel"
+	StatusLabel.Size = UDim2.new(1, 0, 0, 20)
+	StatusLabel.BackgroundTransparency = 1
+	StatusLabel.Position = UDim2.new(0, 0, 0, 135)
+	StatusLabel.Font = Enum.Font.Gotham
+	StatusLabel.Text = "Attempts remaining: " .. CONFIG.MAX_ATTEMPTS
+	StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+	StatusLabel.TextSize = 14
+	StatusLabel.Parent = MainFrame
+	
+	-- Create submit button
+	local SubmitButton = Instance.new("TextButton")
+	SubmitButton.Name = "SubmitButton"
+	SubmitButton.Size = UDim2.new(0.4, 0, 0, 40)
+	SubmitButton.Position = UDim2.new(0.3, 0, 0, 165)
+	SubmitButton.BackgroundColor3 = Color3.fromRGB(70, 130, 220)
+	SubmitButton.BorderSizePixel = 0
+	SubmitButton.Font = Enum.Font.GothamBold
+	SubmitButton.Text = "SUBMIT"
+	SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	SubmitButton.TextSize = 16
+	SubmitButton.AutoButtonColor = false
+	SubmitButton.Parent = MainFrame
+	
+	-- Add corner radius to button
+	local ButtonCorner = Instance.new("UICorner")
+	ButtonCorner.CornerRadius = UDim.new(0, 6)
+	ButtonCorner.Parent = SubmitButton
+	
+	-- Get key button
+	local GetKeyButton = Instance.new("TextButton")
+	GetKeyButton.Name = "GetKeyButton"
+	GetKeyButton.Size = UDim2.new(0.6, 0, 0, 30)
+	GetKeyButton.Position = UDim2.new(0.2, 0, 0, 215)
+	GetKeyButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	GetKeyButton.BorderSizePixel = 0
+	GetKeyButton.Font = Enum.Font.Gotham
+	GetKeyButton.Text = "Get Key"
+	GetKeyButton.TextColor3 = Color3.fromRGB(100, 180, 250)
+	GetKeyButton.TextSize = 14
+	GetKeyButton.AutoButtonColor = false
+	GetKeyButton.Parent = MainFrame
+	
+	-- Create close button
+	local CloseButton = Instance.new("TextButton")
+	CloseButton.Name = "CloseButton"
+	CloseButton.Size = UDim2.new(0, 30, 0, 30)
+	CloseButton.Position = UDim2.new(1, -35, 0, 5)
+	CloseButton.BackgroundTransparency = 1
+	CloseButton.Font = Enum.Font.GothamBold
+	CloseButton.Text = "X"
+	CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+	CloseButton.TextSize = 16
+	CloseButton.Parent = MainFrame
+	
+	return KeySystemGui, MainFrame, KeyInput, SubmitButton, StatusLabel, GetKeyButton, CloseButton
+end
+
+-- Function to handle button hover effects
+local function setupButtonEffects(button)
+	local originalColor = button.BackgroundColor3
+	local hoverColor = Color3.fromRGB(
+		math.min(originalColor.R * 255 + 20, 255) / 255,
+		math.min(originalColor.G * 255 + 20, 255) / 255,
+		math.min(originalColor.B * 255 + 20, 255) / 255
+	)
+	local clickColor = Color3.fromRGB(
+		math.max(originalColor.R * 255 - 20, 0) / 255,
+		math.max(originalColor.G * 255 - 20, 0) / 255,
+		math.max(originalColor.B * 255 - 20, 0) / 255
+	)
+	
+	button.MouseEnter:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = hoverColor}):Play()
+	end)
+	
+	button.MouseLeave:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = originalColor}):Play()
+	end)
+	
+	button.MouseButton1Down:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = clickColor}):Play()
+	end)
+	
+	button.MouseButton1Up:Connect(function()
+		TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = hoverColor}):Play()
+	end)
+end
+
+-- Function to validate key
+local function validateKey(key)
+	for _, validKey in ipairs(CONFIG.KEYS) do
+		if key == validKey then
+			return true
+		end
+	end
+	return false
+end
+
+-- Main function to run the key system
+local function runKeySystem()
+	local KeySystemGui, MainFrame, KeyInput, SubmitButton, StatusLabel, GetKeyButton, CloseButton = createKeySystemUI()
+	
+	-- Setup button effects
+	setupButtonEffects(SubmitButton)
+	
+	-- Variables for key validation
+	local attempts = CONFIG.MAX_ATTEMPTS
+	
+	-- Handle submit button click
+	SubmitButton.MouseButton1Click:Connect(function()
+		local keyText = KeyInput.Text
+		
+		if keyText == "" then
+			StatusLabel.Text = "Please enter a key!"
+			StatusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
+			return
+		end
+		
+		if validateKey(keyText) then
+			-- Key is valid
+			StatusLabel.Text = "Key is valid! Loading..."
+			StatusLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+			
+			-- Tween success animation
+			local successTween = TweenService:Create(MainFrame, TweenInfo.new(0.5), {BackgroundColor3 = Color3.fromRGB(40, 100, 40)})
+			successTween:Play()
+			
+			-- Wait for animation to complete
+			wait(1)
+			
+			-- Hide UI
+			KeySystemGui:Destroy()
+			
+			-- Fire remote event to server to validate key
+			ValidateKeyEvent:FireServer(true)
+			
+			-- Here you would typically fire a RemoteEvent to the server
+			-- to load your script after successful validation
+
+-- Run the key system
+runKeySystem()
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Yes Or No";
+    Text = "U want reset Config?";
+    Icon = "rbxassetid://103691718434653";
+    Duration = 1e5;
+	Button1 = "Yes";
+	Button2 = "No";
+})
+
 if not game:IsLoaded() then
     game.Loaded:Wait()
 end
@@ -316,7 +526,7 @@ function CheckQuest()
             NameMon = "Fishman Warrior"
             CFrameQuest = CFrame.new(61122.65234375, 18.497442245483, 1569.3997802734)
             CFrameMon = CFrame.new(60878.30078125, 18.482830047607422, 1543.7574462890625)
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(61163.8515625, 11.6796875, 1819.7841796875))
             end
         elseif MyLevel >= 400 and MyLevel <= 449 then
@@ -326,7 +536,7 @@ function CheckQuest()
             NameMon = "Fishman Commando"
             CFrameQuest = CFrame.new(61122.65234375, 18.497442245483, 1569.3997802734)
             CFrameMon = CFrame.new(61922.6328125, 18.482830047607422, 1493.934326171875)
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(61163.8515625, 11.6796875, 1819.7841796875))
             end
         elseif MyLevel >= 450 and MyLevel <= 474 then
@@ -336,7 +546,7 @@ function CheckQuest()
             NameMon = "God's Guard"
             CFrameQuest = CFrame.new(-4721.88867, 843.874695, -1949.96643, 0.996191859, -0, -0.0871884301, 0, 1, -0, 0.0871884301, 0, 0.996191859)
             CFrameMon = CFrame.new(-4710.04296875, 845.2769775390625, -1927.3079833984375)
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(-4607.82275, 872.54248, -1667.55688))
             end
         elseif MyLevel >= 475 and MyLevel <= 524 then
@@ -346,7 +556,7 @@ function CheckQuest()
             NameMon = "Shanda"
             CFrameQuest = CFrame.new(-7859.09814, 5544.19043, -381.476196, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998)
             CFrameMon = CFrame.new(-7678.48974609375, 5566.40380859375, -497.2156066894531)
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(-7894.6176757813, 5547.1416015625, -380.29119873047))
             end
         elseif MyLevel >= 525 and MyLevel <= 549 then
@@ -484,7 +694,7 @@ function CheckQuest()
             NameMon = "Ship Deckhand"
             CFrameQuest = CFrame.new(1037.80127, 125.092171, 32911.6016)         
             CFrameMon = CFrame.new(1212.0111083984375, 150.79205322265625, 33059.24609375)    
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
             end
         elseif MyLevel >= 1275 and MyLevel <= 1299 then
@@ -494,7 +704,7 @@ function CheckQuest()
             NameMon = "Ship Engineer"
             CFrameQuest = CFrame.new(1037.80127, 125.092171, 32911.6016)   
             CFrameMon = CFrame.new(919.4786376953125, 43.54401397705078, 32779.96875)   
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
             end             
         elseif MyLevel >= 1300 and MyLevel <= 1324 then
@@ -504,7 +714,7 @@ function CheckQuest()
             NameMon = "Ship Steward"
             CFrameQuest = CFrame.new(968.80957, 125.092171, 33244.125)         
             CFrameMon = CFrame.new(919.4385375976562, 129.55599975585938, 33436.03515625)      
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
             end
         elseif MyLevel >= 1325 and MyLevel <= 1349 then
@@ -514,7 +724,7 @@ function CheckQuest()
             NameMon = "Ship Officer"
             CFrameQuest = CFrame.new(968.80957, 125.092171, 33244.125)
             CFrameMon = CFrame.new(1036.0179443359375, 181.4390411376953, 33315.7265625)
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
             end
         elseif MyLevel >= 1350 and MyLevel <= 1374 then
@@ -524,7 +734,7 @@ function CheckQuest()
             NameMon = "Arctic Warrior"
             CFrameQuest = CFrame.new(5667.6582, 26.7997818, -6486.08984, -0.933587909, 0, -0.358349502, 0, 1, 0, 0.358349502, 0, -0.933587909)
             CFrameMon = CFrame.new(5966.24609375, 62.97002029418945, -6179.3828125)
-            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 100 then
+            if getgenv().AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
                 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(-6508.5581054688, 5000.034996032715, -132.83953857422))
             end
         elseif MyLevel >= 1375 and MyLevel <= 1424 then
@@ -828,7 +1038,7 @@ function MaterialMon()
             MPos = CFrame.new(-4698, 845, -1912)
             SP = "Default"
             local targetPosition = Vector3.new(-4607.82275, 872.54248, -1667.55688)
-            shouldRequestEntrance(targetPosition, 100)
+            shouldRequestEntrance(targetPosition, 10000)
         elseif SelectMaterial == "Leather + Scrap Metal" then
             MMon = { "Brute", "Pirate" }
             MPos = CFrame.new(-1145, 15, 4350)
@@ -969,7 +1179,7 @@ function fastpos(Pos)
     local currentTime = tick()
     if currentTime - lastTweenTime >= tweenCooldown then
         local Distance = (Pos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-        local Speed = 100        
+        local Speed = 1000        
         local tween = game:GetService("TweenService"):Create(
             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
             TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear),
@@ -1097,7 +1307,7 @@ function topos(Tween_Pos)
             and game:GetService("Players").LocalPlayer.Character.Humanoid.Health > 0 
             and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart then
             if not TweenSpeed then
-                TweenSpeed = 400
+                TweenSpeed = 350
             end
             DefualtY = Tween_Pos.Y
             TargetY = Tween_Pos.Y
@@ -1401,13 +1611,13 @@ function AttackNoCoolDown()
     if not equippedWeapon then return end
     local enemiesInRange = GetEnemiesInRange(character, 60)
     if equippedWeapon:FindFirstChild("LeftClickRemote") then
-        local attackCount = 10  
+        local attackCount = 1  
         for _, enemy in ipairs(enemiesInRange) do
             local rootPart = enemy:FindFirstChild("HumanoidRootPart")
             if rootPart then
                 local direction = (rootPart.Position - character:GetPivot().Position).Unit
                 equippedWeapon.LeftClickRemote:FireServer(direction, attackCount)
-                attackCount = attackCount + 10
+                attackCount = attackCount + 1
             end
         end
     else
@@ -1435,18 +1645,13 @@ end
 print("--[[Loaded UI]]--")
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 Window = Fluent:CreateWindow({
-    Title = "Mastery Hub [Prenium]",
+    Title = "Mastery Hub-Blox Fruit [Free]",
     SubTitle = "by Qminh(Kenny)",
-    TabWidth = 160,
+    TabWidth = 155,
     Size = UDim2.fromOffset(500, 350),
     Acrylic = true, 
-    Theme = "Light",
+    Theme = "light",
     MinimizeKey = Enum.KeyCode.LeftControl 
-})
-Info = Window:AddTab({ Title = "Info", Icon = "" })
-Time = Server:AddParagraph({
-    Title = "Info Qminh (Kenny)",
-    Content = ""
 })
 Info = Window:AddTab({ Title = "Tab Info", Icon = "" })
 Info:AddButton({
@@ -1775,7 +1980,7 @@ function UpdateTime()
     local Hour = math.floor(GameTime / (60^2)) % 24
     local Minute = math.floor(GameTime / (60^1)) % 60
     local Second = math.floor(GameTime / (60^0)) % 60
-    Timmessss:SetDesc("| Hour: "..Hour.."Minute: "..Minute.."Second: "..Second.." |")
+    Timmessss:SetDesc(Hour.." Hour (h) "..Minute.." Minute (m) "..Second.." Second (s) ")
 end
 spawn(function()
     while true do
@@ -2092,7 +2297,7 @@ LGa:AddButton({
 	end
 })
 LGa:AddButton({
-    Title = "Open Devil Fruit Shop Mirage",
+    Title = "Open Devil Fruit Shop [ Mirage ]",
     Description = "",
     Callback = function()     
     end
@@ -2684,7 +2889,7 @@ spawn(function()
 		end
 	end
 end)
-getgenv().FastAttack = true
+getgenv().FastAttack = false
 Toggle = Settings:AddToggle("Toggle", {Title = "Fast Attack", Default = true})
 local FastAttackTask
 local function FastAttackLoop()
@@ -2848,6 +3053,14 @@ spawn(function()
     end
 end)
 Main = Window:AddTab({ Title = "Tab Farming", Icon = "" })
+Main:AddButton({
+    Title = "Copy discord invite link",
+    Callback = function()
+        pcall(function()
+            setclipboard("https://discord.gg/2YCGftRB")
+        end)
+    end
+})
 Main:AddParagraph({
      Title = "Main Farm",
      Content = "-----"
@@ -2907,7 +3120,7 @@ spawn(function()
                                             PosMon = v.HumanoidRootPart.CFrame
                                             topos(v.HumanoidRootPart.CFrame * Pos)
                                             v.HumanoidRootPart.CanCollide = false
-                                            v.Humanoid.WalkSpeed = 10
+                                            v.Humanoid.WalkSpeed = 0
                                             v.Head.CanCollide = false
                                             getgenv().StartMagnet = true
                                             sethiddenproperty(player, "SimulationRadius", math.huge)
@@ -2947,7 +3160,7 @@ spawn(function()
                         v.Humanoid:ChangeState(14)
                         v.HumanoidRootPart.CanCollide = false
                         v.Humanoid.JumpPower = 0
-                        v.Humanoid.WalkSpeed = 10
+                        v.Humanoid.WalkSpeed = 0
                         local animator = v.Humanoid:FindFirstChild("Animator")
                         if animator then
                             animator:Destroy()
@@ -2974,7 +3187,7 @@ spawn(function()
                                 AutoHaki()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 10
+                                v.Humanoid.WalkSpeed = 0
                                 v.Head.CanCollide = false
                                 getgenv().BonesBring = true
                                 topos(v.HumanoidRootPart.CFrame * Pos)
@@ -3029,7 +3242,7 @@ spawn(function()
                         v.Humanoid:ChangeState(14)
                         v.HumanoidRootPart.CanCollide = false
                         v.Humanoid.JumpPower = 0
-                        v.Humanoid.WalkSpeed = 10
+                        v.Humanoid.WalkSpeed = 0
                         if v.Humanoid:FindFirstChild('Animator') then
                             v.Humanoid.Animator:Destroy()
                         end
@@ -3057,7 +3270,7 @@ spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 10
+                                    v.Humanoid.WalkSpeed = 0
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                                     topos(v.HumanoidRootPart.CFrame * Pos)
                                 until not getgenv().AutoFarm or not v.Parent or v.Humanoid.Health <= 0
@@ -3087,7 +3300,7 @@ spawn(function()
                                         AutoHaki()
                                         EquipWeapon(getgenv().SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 10
+                                        v.Humanoid.WalkSpeed = 0
                                         v.Head.CanCollide = false
                                         topos(v.HumanoidRootPart.CFrame * Pos)
                                         getgenv().CakeBring = true
@@ -3147,7 +3360,7 @@ spawn(function()
                     AutoHaki()
                     EquipWeapon(getgenv().SelectWeapon)
                     v.HumanoidRootPart.CanCollide = false
-                    v.Humanoid.WalkSpeed = 10
+                    v.Humanoid.WalkSpeed = 0
                     v.Head.CanCollide = false
                     topos(v.HumanoidRootPart.CFrame * Pos)
                     getgenv().StartMagnet = true
@@ -3256,7 +3469,7 @@ spawn(function()
                                                 PosMonMasteryFruit = v.HumanoidRootPart.CFrame
                                                 MonFarm = v.Name
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                v.Humanoid.WalkSpeed = 10
+                                                v.Humanoid.WalkSpeed = 0
                                                 v.Head.CanCollide = false
                                                 UseSkill = true
                                                 Skillaimbot = true
@@ -3270,7 +3483,7 @@ spawn(function()
                                                 topos(v.HumanoidRootPart.CFrame * Pos)
                                                 v.HumanoidRootPart.CanCollide = false
                                                 PosMonMasteryFruit = v.HumanoidRootPart.CFrame
-                                                v.Humanoid.WalkSpeed = 10
+                                                v.Humanoid.WalkSpeed = 0
                                                 v.Head.CanCollide = false
                                             end
                                             getgenv().StartMagnet = true
@@ -3431,7 +3644,7 @@ spawn(function()
                                                 MonFarm = v.Name                
                                                 PosMon = v.HumanoidRootPart.CFrame
                                                 topos(v.HumanoidRootPart.CFrame * CFrame.new(0,0,10))
-                                                v.Humanoid.WalkSpeed = 10
+                                                v.Humanoid.WalkSpeed = 0
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.HumanoidRootPart.Size = Vector3.new(2,2,1)
                                                 v.Head.CanCollide = false                                                
@@ -3451,7 +3664,7 @@ spawn(function()
                                                 EquipWeapon(getgenv().SelectWeapon)
                                                 MonFarm = v.Name                
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                v.Humanoid.WalkSpeed = 10
+                                                v.Humanoid.WalkSpeed = 0
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.Head.CanCollide = false    
                                                 topos(v.HumanoidRootPart.CFrame * Pos)
@@ -3648,7 +3861,7 @@ spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     target.CanCollide = false
-                                    target.Parent.Humanoid.WalkSpeed = 10
+                                    target.Parent.Humanoid.WalkSpeed = 0
                                     target.CFrame = OldCFrameShark
                                     topos(target.CFrame * CFrame.new(2, 20, 2))
                                 until not target.Parent or target.Parent.Humanoid.Health <= 0 or not getgenv().AutoGetMelee or hasWaterKey
@@ -3884,7 +4097,7 @@ spawn(function()
                                         AutoHaki()
                                         EquipWeapon(getgenv().SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 10
+                                        v.Humanoid.WalkSpeed = 0
                                         v.Head.CanCollide = false
                                         v.HumanoidRootPart.CFrame = oldCFrameSecond
                                         topos(v.HumanoidRootPart.CFrame * Pos)
@@ -3936,7 +4149,7 @@ spawn(function()
                                         topos(v.HumanoidRootPart.CFrame * Pos)
                                         v.HumanoidRootPart.CFrame = oldCFrameThird                                              
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 10
+                                        v.Humanoid.WalkSpeed = 0
                                         replicatedStorage.Remotes.CommF_:InvokeServer("TravelZou")                                        
                                     until not getgenv().AutoThirdSea or v.Humanoid.Health <= 0 or not v.Parent
                                 end
@@ -4053,7 +4266,7 @@ spawn(function()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 if enemy:FindFirstChild("HumanoidRootPart") then
                                     enemy.HumanoidRootPart.CanCollide = false
-                                    enemy.Humanoid.WalkSpeed = 10
+                                    enemy.Humanoid.WalkSpeed = 0
                                     topos(enemy.HumanoidRootPart.CFrame * Pos)
                                 end
                             until not getgenv().AutoEliteHunter or enemy.Humanoid.Health <= 0 or not enemy.Parent
@@ -4142,7 +4355,7 @@ spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 10
+                                    v.Humanoid.WalkSpeed = 0
                                     topos(v.HumanoidRootPart.CFrame * Pos)
                                 end)
                             until getgenv().AutoRipIndra == false or v.Humanoid.Health <= 0
@@ -4186,7 +4399,7 @@ spawn(function()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 topos(v.HumanoidRootPart.CFrame * Pos)
                                 v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 10
+                                v.Humanoid.WalkSpeed = 0
                                 v.HumanoidRootPart.Transparency = 1
                             until v.Humanoid.Health <= 0 or not getgenv().AutoSoulReaper
                         end
@@ -4360,7 +4573,7 @@ spawn(function()
                                                 AutoHaki()
                                                 EquipWeapon(getgenv().SelectWeapon)    
                                                 v.HumanoidRootPart.CanCollide = false
-                                                v.Humanoid.WalkSpeed = 10
+                                                v.Humanoid.WalkSpeed = 0
                                                 topos(v.HumanoidRootPart.CFrame * Pos)                                                    
                                                 sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
                                             until getgenv().AutoDoughKing == false or 
@@ -4398,7 +4611,7 @@ spawn(function()
                                 AutoHaki()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 10           
+                                v.Humanoid.WalkSpeed = 0           
                                 topos(v.HumanoidRootPart.CFrame * Pos)
                             until not getgenv().AutoDarkbeard or not v.Parent or v.Humanoid.Health <= 0
                         end
@@ -4665,7 +4878,7 @@ spawn(function()
                                         PosHee = v.HumanoidRootPart.CFrame
                                         v.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 10
+                                        v.Humanoid.WalkSpeed = 0
                                         v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
                                     until getgenv().AutoObservationHakiV2 == false or v.Humanoid.Health <= 0
                                 end
@@ -4686,7 +4899,7 @@ spawn(function()
                                         end
                                         v.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 10
+                                        v.Humanoid.WalkSpeed = 0
                                         v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
                                     until getgenv().AutoObservationHakiV2 == false or v.Humanoid.Health <= 0
                                 end
@@ -4899,8 +5112,8 @@ spawn(function()
                                     if humanoidRootPart.CanCollide then
                                         humanoidRootPart.CanCollide = false
                                     end
-                                    if humanoid.WalkSpeed ~= 10 then
-                                        humanoid.WalkSpeed = 10
+                                    if humanoid.WalkSpeed ~= 0 then
+                                        humanoid.WalkSpeed = 0
                                     end
                                     if humanoidRootPart.Size ~= Vector3.new(80, 80, 80) then
                                         humanoidRootPart.Size = Vector3.new(80, 80, 80)
@@ -4944,8 +5157,8 @@ spawn(function()
                                     if humanoidRootPart.CanCollide then
                                         humanoidRootPart.CanCollide = false
                                     end
-                                    if humanoid.WalkSpeed ~= 10 then
-                                        humanoid.WalkSpeed = 10
+                                    if humanoid.WalkSpeed ~= 0 then
+                                        humanoid.WalkSpeed = 0
                                     end
                                     if humanoidRootPart.Size ~= Vector3.new(80, 80, 80) then
                                         humanoidRootPart.Size = Vector3.new(80, 80, 80)
@@ -4984,7 +5197,7 @@ spawn(function()
                                         AutoHaki()
                                         EquipWeapon(getgenv().SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 10
+                                        v.Humanoid.WalkSpeed = 0
                                         v.HumanoidRootPart.Size = Vector3.new(80, 80, 80)
                                         topos(v.HumanoidRootPart.CFrame * Pos)
                                     until not getgenv().AutoFarmAllBoss or not v.Parent or v.Humanoid.Health <= 0
@@ -5308,7 +5521,7 @@ end
 Sea = Window:AddTab({ Title = "Tab Sea Event", Icon = "" })
 SetSpeedBoatSlider = Sea:AddSlider("SliderSpeedBoat", {
 	Title = "Ship Speed",
-	Default = 350,
+	Default = 300,
 	Min = 0,
 	Max = 1000,
 	Rounding = 1,
@@ -5799,7 +6012,7 @@ spawn(function()
                             AutoHaki()
                             EquipWeapon(getgenv().SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
-                            v.Humanoid.WalkSpeed = 10
+                            v.Humanoid.WalkSpeed = 0
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                             if char.Humanoid.Health < 2000 then
                                 fastpos(v.HumanoidRootPart.CFrame * CFrame.new(0, 300, 0))
@@ -6206,7 +6419,7 @@ task.spawn(function()
         end
     end
 end)
-ChooseSkill = Window:AddTab({ Title = "Setting Hold \n and Select Skill", Icon = "" })
+ChooseSkill = Window:AddTab({ Title = "Tab Setting Select Skill", Icon = "" })
 ChooseSkill:AddParagraph({
     Title = "Setting Sea Event",
     Content = "-----"
@@ -6391,7 +6604,7 @@ task.spawn(function()
         end)
     end
 end)
-Volcanic = Window:AddTab({ Title = "Tab Volcano Event", Icon = "" })
+Volcanic = Window:AddTab({ Title = "Tab Volcanic Event", Icon = "" })
 Volcanic:AddButton({
 	Title = "Destroy Lava In Prehistoric Island",
 	Callback = function()
@@ -6799,7 +7012,7 @@ spawn(function()
             local rootPart = cursedCaptain.HumanoidRootPart
             if humanoid.Health > 0 then
                 rootPart.CanCollide = false
-                humanoid.WalkSpeed = 10
+                humanoid.WalkSpeed = 0
                 rootPart.Size = Vector3.new(50,50,50)
                 repeat
                     task.wait(0.05)
@@ -6908,7 +7121,7 @@ task.spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 10
+                                    v.Humanoid.WalkSpeed = 0
                                     v.Head.CanCollide = false
                                     topos(v.HumanoidRootPart.CFrame * Pos)
                                     getgenv().BonesBring = true
@@ -7242,7 +7455,7 @@ spawn(function()
                                 if v:FindFirstChild("Head") then
                                     v.Head.CanCollide = false
                                 end
-                                humanoid.WalkSpeed = 10
+                                humanoid.WalkSpeed = 0
                                 sethiddenproperty(player, "SimulationRadius", math.huge)
                                 while getgenv().AutoKillPlayerAfterTrial and humanoid.Health > 0 and v.Parent and rootPart and humanoid do
                                     task.wait(0.1)
@@ -7255,7 +7468,7 @@ spawn(function()
         end
     end
 end)
-Get = Window:AddTab({ Title = "Tab Get \n and Upgrade Items", Icon = "" })
+Get = Window:AddTab({ Title = "Tab Get Items And Buy", Icon = "" })
 Toggle = Get:AddToggle("Toggle", {Title = "Auto Trade Bone", Default = false})
 Toggle:OnChanged(function(Value)
     getgenv().AutoTradeBone = Value
@@ -7467,7 +7680,7 @@ spawn(function()
                                                 enemy.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                                                 enemy.HumanoidRootPart.Transparency = 1
                                                 enemy.Humanoid.JumpPower = 0
-                                                enemy.Humanoid.WalkSpeed = 10
+                                                enemy.Humanoid.WalkSpeed = 0
                                                 enemy.HumanoidRootPart.CanCollide = false
                                                 enemy.HumanoidRootPart.CFrame = hrp.CFrame * CFrame.new(0, 20, 0)                                                
                                                 topos(CFrame.new(-10160.787, 138.662, 5955.031))
@@ -7527,16 +7740,16 @@ task.spawn(function()
                             EquipWeapon("Tushita")
                         elseif not hasNotified then
                             game.StarterGui:SetCore("SendNotification", {
-                                Title = "Mastery Hub",
+                                Title = "Hiru Hub",
                                 Text = "Use! - Yama or Tushita",
-                                con = "rbxassetid://103691718434653",
+                                con = "rbxassetid://11995210995",
                                 Duration = 10,
                             })
                             hasNotified = true
                         end
                         Buso()
                         v.HumanoidRootPart.CanCollide = false
-                        v.Humanoid.WalkSpeed = 10
+                        v.Humanoid.WalkSpeed = 0
                         topos(v.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
                         if syn and not getgenv().SimulationSet then
                             sethiddenproperty(player, "SimulationRadius", math.huge)
@@ -7610,7 +7823,7 @@ spawn(function()
                                 repeat
                                     task.wait(0.1)
                                     rootPart.CanCollide = false
-                                    humanoid.WalkSpeed = 10
+                                    humanoid.WalkSpeed = 0
                                     if (rootPart.Position - hrp.Position).Magnitude > 5 then
                                         topos(rootPart.CFrame * Pos)
                                     end
@@ -7694,7 +7907,7 @@ spawn(function()
                                             AutoHaki()
                                             EquipWeapon(getgenv().SelectWeapon)
                                             mobLeader.HumanoidRootPart.CanCollide = false
-                                            mobLeader.Humanoid.WalkSpeed = 10
+                                            mobLeader.Humanoid.WalkSpeed = 0
                                             topos(mobLeader.HumanoidRootPart.CFrame)
                                             game:GetService("VirtualUser"):CaptureController()
                                             game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
@@ -7724,7 +7937,7 @@ spawn(function()
                             saberExpert.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                             saberExpert.HumanoidRootPart.Transparency = 1
                             saberExpert.Humanoid.JumpPower = 0
-                            saberExpert.Humanoid.WalkSpeed = 10
+                            saberExpert.Humanoid.WalkSpeed = 0
                             saberExpert.HumanoidRootPart.CanCollide = false
                             game:GetService("VirtualUser"):CaptureController()
                             game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
@@ -8098,7 +8311,7 @@ Toggle:OnChanged(function(v)
 end)
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
-getgenv().WalkSpeed = 10
+getgenv().WalkSpeed = 16
 Toggle = PVP:AddToggle("Toggle", {
     Title = "Change WalkSpeed",
     Default = false
@@ -8151,94 +8364,71 @@ Input = PVP:AddInput("Input", {
      end
 })
 ----------------------------------------------------------------------------------------------------
-game.StarterGui:SetCore("SendNotification", {
-    Title = "Yes Or No";
-    Text = "U want reset Config?";
-    Icon = "rbxassetid://103691718434653";
-    Duration = 1e5;
-	Button1 = "Yes";
-	Button2 = "No";
-})
+local MasteryHubBtn = Instance.new("ScreenGui")
+    local dutdit = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local ImageLabel = Instance.new("ImageLabel")
+    local TextButton = Instance.new("TextButton")
 
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local ImageLabel = Instance.new("ImageLabel")
-local UICorner = Instance.new("UICorner")
-local TextButton = Instance.new("TextButton")
+    MasteryHubBtn.Name = "Mastery Hub Btn"
+    MasteryHubBtn.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    MasteryHubBtn.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-ScreenGui.Parent = game:GetService("CoreGui")  
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Name = "Banana Cat Hub Btn"
+    dutdit.Name = "dut dit"
+    dutdit.Parent = MasteryHubBtn
+    dutdit.AnchorPoint = Vector2.new(0.1, 0.1)
+    dutdit.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    dutdit.Position = UDim2.new(0, 20, 0.1, -6)
+    dutdit.Size = UDim2.new(0, 50, 0, 50)
 
-Frame.Parent = ScreenGui
-Frame.AnchorPoint = Vector2.new(0.1, 0.1)
-Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-Frame.BackgroundTransparency = 0
-Frame.BorderColor3 = Color3.fromRGB(27, 42, 53)
-Frame.BorderSizePixel = 1
-Frame.Position = UDim2.new(0, 20, 0.1, -6)  
-Frame.Size = UDim2.new(0, 50, 0, 50)
-Frame.Name = "dut dit"
+    UICorner.CornerRadius = UDim.new(1, 0)
+    UICorner.Parent = dutdit
 
-ImageLabel.Parent = Frame
-ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-ImageLabel.Size = UDim2.new(0, 40, 0, 40)
-ImageLabel.BackgroundColor3 = Color3.fromRGB(163, 162, 165)
-ImageLabel.BackgroundTransparency = 1
-ImageLabel.BorderSizePixel = 1
-ImageLabel.BorderColor3 = Color3.fromRGB(27, 42, 53)
-ImageLabel.ImageColor3 = Color3.fromRGB(255, 255, 255)
-ImageLabel.Image = "http://www.roblox.com/asset/?id=103691718434653"
+    ImageLabel.Parent = dutdit
+    ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+    ImageLabel.BackgroundTransparency = 1.0
+    ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
+    ImageLabel.Size = UDim2.new(0, 40, 0, 40)
+    ImageLabel.Image = "rbxassetid://103691718434653"
 
-UICorner.CornerRadius = UDim.new(1, 0)
-UICorner.Parent = Frame
+    TextButton.Parent = dutdit
+    TextButton.BackgroundTransparency = 1.0
+    TextButton.Size = UDim2.new(1, 0, 1, 0)
+    TextButton.Font = Enum.Font.SourceSans
+    TextButton.Text = ""
+    TextButton.TextColor3 = Color3.fromRGB(27, 42, 53)
 
-TextButton.Name = "TextButton"
-TextButton.Parent = Frame
-TextButton.AnchorPoint = Vector2.new(0, 0)
-TextButton.Position = UDim2.new(0, 0, 0, 0)
-TextButton.Size = UDim2.new(1, 0, 1, 0)
-TextButton.BackgroundColor3 = Color3.fromRGB(163, 162, 165)
-TextButton.BackgroundTransparency = 1
-TextButton.BorderSizePixel = 1
-TextButton.BorderColor3 = Color3.fromRGB(27, 42, 53)
-TextButton.TextColor3 = Color3.fromRGB(27, 42, 53)
-TextButton.Text = ""
-TextButton.Font = Enum.Font.SourceSans
-TextButton.TextSize = 8
-TextButton.TextTransparency = 0
+    local TweenService = game:GetService("TweenService")
+    local VirtualInputManager = game:GetService("VirtualInputManager")
 
-local TweenService = game:GetService("TweenService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
+    local zoomedIn = false
+    local originalSize = UDim2.new(0, 40, 0, 40)
+    local zoomedSize = UDim2.new(0, 30, 0, 30)
+    local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
-local zoomedIn = false
-local originalSize = UDim2.new(0, 40, 0, 40)
-local zoomedSize = UDim2.new(0, 30, 0, 30)
-local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local faded = false
+    local fadeInTween = TweenService:Create(dutdit, tweenInfo, {BackgroundTransparency = 0.25})
+    local fadeOutTween = TweenService:Create(dutdit, tweenInfo, {BackgroundTransparency = 0})
 
-local faded = false
-local fadeInTween = TweenService:Create(Frame, tweenInfo, {BackgroundTransparency = 0.25})
-local fadeOutTween = TweenService:Create(Frame, tweenInfo, {BackgroundTransparency = 0})
+    TextButton.MouseButton1Down:Connect(
+        function()
+            if zoomedIn then
+                TweenService:Create(ImageLabel, tweenInfo, {Size = originalSize}):Play()
+            else
+                TweenService:Create(ImageLabel, tweenInfo, {Size = zoomedSize}):Play()
+            end
+            zoomedIn = not zoomedIn
 
-TextButton.MouseButton1Down:Connect(function()
+            if faded then
+                fadeOutTween:Play()
+            else
+                fadeInTween:Play()
+            end
+            faded = not faded
 
-    if zoomedIn then
-        TweenService:Create(ImageLabel, tweenInfo, {Size = originalSize}):Play()
-    else
-        TweenService:Create(ImageLabel, tweenInfo, {Size = zoomedSize}):Play()
-    end
-    zoomedIn = not zoomedIn
-
-    if faded then
-        fadeOutTween:Play()
-    else
-        fadeInTween:Play()
-    end
-    faded = not faded
-
-    VirtualInputManager:SendKeyEvent(true, "LeftControl", false, game)
-end)
+            VirtualInputManager:SendKeyEvent(true, "LeftControl", false, game)
+        end
+    )
 --\\ ♡VIP♡
 ----------------------------------------------------------------------------------------------------
 print("--[[Hop Server If You Meet Game Admin]]--")
@@ -8281,10 +8471,8 @@ if currentTime - lastNotificationTime >= notificationCooldown then
 end
 
 else
-    if not getgenv().Key then
-        -- Nếu không có key, cảnh báo
-        warn("please enter your key! or if you don't have the key please visit the web https://mastery-hub.github.io/GetKeyScriptMastery/ thanks you")
-    end
-    -- Nếu khóa không hợp lệ, yêu cầu nhập lại
+    if not getgenv().Key then       
+        warn("please enter your key!")
+    end  
     game.Players.LocalPlayer:Kick("Invalid Key! Please enter your correct key!")
 end
