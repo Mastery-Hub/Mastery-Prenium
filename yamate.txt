@@ -969,7 +969,7 @@ function fastpos(Pos)
     local currentTime = tick()
     if currentTime - lastTweenTime >= tweenCooldown then
         local Distance = (Pos.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-        local Speed = 1000        
+        local Speed = 10000        
         local tween = game:GetService("TweenService"):Create(
             game:GetService("Players").LocalPlayer.Character.HumanoidRootPart,
             TweenInfo.new(Distance / Speed, Enum.EasingStyle.Linear),
@@ -1097,7 +1097,7 @@ function topos(Tween_Pos)
             and game:GetService("Players").LocalPlayer.Character.Humanoid.Health > 0 
             and game:GetService("Players").LocalPlayer.Character.HumanoidRootPart then
             if not TweenSpeed then
-                TweenSpeed = 350
+                TweenSpeed = 400
             end
             DefualtY = Tween_Pos.Y
             TargetY = Tween_Pos.Y
@@ -1401,13 +1401,13 @@ function AttackNoCoolDown()
     if not equippedWeapon then return end
     local enemiesInRange = GetEnemiesInRange(character, 60)
     if equippedWeapon:FindFirstChild("LeftClickRemote") then
-        local attackCount = 1  
+        local attackCount = 100  
         for _, enemy in ipairs(enemiesInRange) do
             local rootPart = enemy:FindFirstChild("HumanoidRootPart")
             if rootPart then
                 local direction = (rootPart.Position - character:GetPivot().Position).Unit
                 equippedWeapon.LeftClickRemote:FireServer(direction, attackCount)
-                attackCount = attackCount + 1
+                attackCount = attackCount + 100
             end
         end
     else
@@ -2665,7 +2665,7 @@ spawn(function()
 		end
 	end
 end)
-getgenv().FastAttack = false
+getgenv().FastAttack = true
 Toggle = Settings:AddToggle("Toggle", {Title = "Fast Attack", Default = true})
 local FastAttackTask
 local function FastAttackLoop()
@@ -2888,7 +2888,7 @@ spawn(function()
                                             PosMon = v.HumanoidRootPart.CFrame
                                             topos(v.HumanoidRootPart.CFrame * Pos)
                                             v.HumanoidRootPart.CanCollide = false
-                                            v.Humanoid.WalkSpeed = 0
+                                            v.Humanoid.WalkSpeed = 10
                                             v.Head.CanCollide = false
                                             getgenv().StartMagnet = true
                                             sethiddenproperty(player, "SimulationRadius", math.huge)
@@ -2928,7 +2928,7 @@ spawn(function()
                         v.Humanoid:ChangeState(14)
                         v.HumanoidRootPart.CanCollide = false
                         v.Humanoid.JumpPower = 0
-                        v.Humanoid.WalkSpeed = 0
+                        v.Humanoid.WalkSpeed = 10
                         local animator = v.Humanoid:FindFirstChild("Animator")
                         if animator then
                             animator:Destroy()
@@ -2955,7 +2955,7 @@ spawn(function()
                                 AutoHaki()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
+                                v.Humanoid.WalkSpeed = 10
                                 v.Head.CanCollide = false
                                 getgenv().BonesBring = true
                                 topos(v.HumanoidRootPart.CFrame * Pos)
@@ -3010,7 +3010,7 @@ spawn(function()
                         v.Humanoid:ChangeState(14)
                         v.HumanoidRootPart.CanCollide = false
                         v.Humanoid.JumpPower = 0
-                        v.Humanoid.WalkSpeed = 0
+                        v.Humanoid.WalkSpeed = 10
                         if v.Humanoid:FindFirstChild('Animator') then
                             v.Humanoid.Animator:Destroy()
                         end
@@ -3038,7 +3038,7 @@ spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
+                                    v.Humanoid.WalkSpeed = 10
                                     v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                                     topos(v.HumanoidRootPart.CFrame * Pos)
                                 until not getgenv().AutoFarm or not v.Parent or v.Humanoid.Health <= 0
@@ -3068,7 +3068,7 @@ spawn(function()
                                         AutoHaki()
                                         EquipWeapon(getgenv().SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.WalkSpeed = 10
                                         v.Head.CanCollide = false
                                         topos(v.HumanoidRootPart.CFrame * Pos)
                                         getgenv().CakeBring = true
@@ -3128,7 +3128,7 @@ spawn(function()
                     AutoHaki()
                     EquipWeapon(getgenv().SelectWeapon)
                     v.HumanoidRootPart.CanCollide = false
-                    v.Humanoid.WalkSpeed = 0
+                    v.Humanoid.WalkSpeed = 10
                     v.Head.CanCollide = false
                     topos(v.HumanoidRootPart.CFrame * Pos)
                     getgenv().StartMagnet = true
@@ -3237,7 +3237,7 @@ spawn(function()
                                                 PosMonMasteryFruit = v.HumanoidRootPart.CFrame
                                                 MonFarm = v.Name
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                v.Humanoid.WalkSpeed = 0
+                                                v.Humanoid.WalkSpeed = 10
                                                 v.Head.CanCollide = false
                                                 UseSkill = true
                                                 Skillaimbot = true
@@ -3251,7 +3251,7 @@ spawn(function()
                                                 topos(v.HumanoidRootPart.CFrame * Pos)
                                                 v.HumanoidRootPart.CanCollide = false
                                                 PosMonMasteryFruit = v.HumanoidRootPart.CFrame
-                                                v.Humanoid.WalkSpeed = 0
+                                                v.Humanoid.WalkSpeed = 10
                                                 v.Head.CanCollide = false
                                             end
                                             getgenv().StartMagnet = true
@@ -3412,7 +3412,7 @@ spawn(function()
                                                 MonFarm = v.Name                
                                                 PosMon = v.HumanoidRootPart.CFrame
                                                 topos(v.HumanoidRootPart.CFrame * CFrame.new(0,0,10))
-                                                v.Humanoid.WalkSpeed = 0
+                                                v.Humanoid.WalkSpeed = 10
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.HumanoidRootPart.Size = Vector3.new(2,2,1)
                                                 v.Head.CanCollide = false                                                
@@ -3432,7 +3432,7 @@ spawn(function()
                                                 EquipWeapon(getgenv().SelectWeapon)
                                                 MonFarm = v.Name                
                                                 PosMon = v.HumanoidRootPart.CFrame
-                                                v.Humanoid.WalkSpeed = 0
+                                                v.Humanoid.WalkSpeed = 10
                                                 v.HumanoidRootPart.CanCollide = false
                                                 v.Head.CanCollide = false    
                                                 topos(v.HumanoidRootPart.CFrame * Pos)
@@ -3629,7 +3629,7 @@ spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     target.CanCollide = false
-                                    target.Parent.Humanoid.WalkSpeed = 0
+                                    target.Parent.Humanoid.WalkSpeed = 10
                                     target.CFrame = OldCFrameShark
                                     topos(target.CFrame * CFrame.new(2, 20, 2))
                                 until not target.Parent or target.Parent.Humanoid.Health <= 0 or not getgenv().AutoGetMelee or hasWaterKey
@@ -3865,7 +3865,7 @@ spawn(function()
                                         AutoHaki()
                                         EquipWeapon(getgenv().SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.WalkSpeed = 10
                                         v.Head.CanCollide = false
                                         v.HumanoidRootPart.CFrame = oldCFrameSecond
                                         topos(v.HumanoidRootPart.CFrame * Pos)
@@ -3917,7 +3917,7 @@ spawn(function()
                                         topos(v.HumanoidRootPart.CFrame * Pos)
                                         v.HumanoidRootPart.CFrame = oldCFrameThird                                              
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.WalkSpeed = 10
                                         replicatedStorage.Remotes.CommF_:InvokeServer("TravelZou")                                        
                                     until not getgenv().AutoThirdSea or v.Humanoid.Health <= 0 or not v.Parent
                                 end
@@ -4034,7 +4034,7 @@ spawn(function()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 if enemy:FindFirstChild("HumanoidRootPart") then
                                     enemy.HumanoidRootPart.CanCollide = false
-                                    enemy.Humanoid.WalkSpeed = 0
+                                    enemy.Humanoid.WalkSpeed = 10
                                     topos(enemy.HumanoidRootPart.CFrame * Pos)
                                 end
                             until not getgenv().AutoEliteHunter or enemy.Humanoid.Health <= 0 or not enemy.Parent
@@ -4123,7 +4123,7 @@ spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
+                                    v.Humanoid.WalkSpeed = 10
                                     topos(v.HumanoidRootPart.CFrame * Pos)
                                 end)
                             until getgenv().AutoRipIndra == false or v.Humanoid.Health <= 0
@@ -4167,7 +4167,7 @@ spawn(function()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 topos(v.HumanoidRootPart.CFrame * Pos)
                                 v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0
+                                v.Humanoid.WalkSpeed = 10
                                 v.HumanoidRootPart.Transparency = 1
                             until v.Humanoid.Health <= 0 or not getgenv().AutoSoulReaper
                         end
@@ -4341,7 +4341,7 @@ spawn(function()
                                                 AutoHaki()
                                                 EquipWeapon(getgenv().SelectWeapon)    
                                                 v.HumanoidRootPart.CanCollide = false
-                                                v.Humanoid.WalkSpeed = 0
+                                                v.Humanoid.WalkSpeed = 10
                                                 topos(v.HumanoidRootPart.CFrame * Pos)                                                    
                                                 sethiddenproperty(game:GetService("Players").LocalPlayer, "SimulationRadius", math.huge)
                                             until getgenv().AutoDoughKing == false or 
@@ -4379,7 +4379,7 @@ spawn(function()
                                 AutoHaki()
                                 EquipWeapon(getgenv().SelectWeapon)
                                 v.HumanoidRootPart.CanCollide = false
-                                v.Humanoid.WalkSpeed = 0           
+                                v.Humanoid.WalkSpeed = 10           
                                 topos(v.HumanoidRootPart.CFrame * Pos)
                             until not getgenv().AutoDarkbeard or not v.Parent or v.Humanoid.Health <= 0
                         end
@@ -4646,7 +4646,7 @@ spawn(function()
                                         PosHee = v.HumanoidRootPart.CFrame
                                         v.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.WalkSpeed = 10
                                         v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
                                     until getgenv().AutoObservationHakiV2 == false or v.Humanoid.Health <= 0
                                 end
@@ -4667,7 +4667,7 @@ spawn(function()
                                         end
                                         v.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.WalkSpeed = 10
                                         v.HumanoidRootPart.Size = Vector3.new(50, 50, 50)
                                     until getgenv().AutoObservationHakiV2 == false or v.Humanoid.Health <= 0
                                 end
@@ -4880,8 +4880,8 @@ spawn(function()
                                     if humanoidRootPart.CanCollide then
                                         humanoidRootPart.CanCollide = false
                                     end
-                                    if humanoid.WalkSpeed ~= 0 then
-                                        humanoid.WalkSpeed = 0
+                                    if humanoid.WalkSpeed ~= 10 then
+                                        humanoid.WalkSpeed = 10
                                     end
                                     if humanoidRootPart.Size ~= Vector3.new(80, 80, 80) then
                                         humanoidRootPart.Size = Vector3.new(80, 80, 80)
@@ -4925,8 +4925,8 @@ spawn(function()
                                     if humanoidRootPart.CanCollide then
                                         humanoidRootPart.CanCollide = false
                                     end
-                                    if humanoid.WalkSpeed ~= 0 then
-                                        humanoid.WalkSpeed = 0
+                                    if humanoid.WalkSpeed ~= 10 then
+                                        humanoid.WalkSpeed = 10
                                     end
                                     if humanoidRootPart.Size ~= Vector3.new(80, 80, 80) then
                                         humanoidRootPart.Size = Vector3.new(80, 80, 80)
@@ -4965,7 +4965,7 @@ spawn(function()
                                         AutoHaki()
                                         EquipWeapon(getgenv().SelectWeapon)
                                         v.HumanoidRootPart.CanCollide = false
-                                        v.Humanoid.WalkSpeed = 0
+                                        v.Humanoid.WalkSpeed = 10
                                         v.HumanoidRootPart.Size = Vector3.new(80, 80, 80)
                                         topos(v.HumanoidRootPart.CFrame * Pos)
                                     until not getgenv().AutoFarmAllBoss or not v.Parent or v.Humanoid.Health <= 0
@@ -5289,7 +5289,7 @@ end
 Sea = Window:AddTab({ Title = "Tab Sea Event", Icon = "" })
 SetSpeedBoatSlider = Sea:AddSlider("SliderSpeedBoat", {
 	Title = "Ship Speed",
-	Default = 300,
+	Default = 350,
 	Min = 0,
 	Max = 1000,
 	Rounding = 1,
@@ -5780,7 +5780,7 @@ spawn(function()
                             AutoHaki()
                             EquipWeapon(getgenv().SelectWeapon)
                             v.HumanoidRootPart.CanCollide = false
-                            v.Humanoid.WalkSpeed = 0
+                            v.Humanoid.WalkSpeed = 10
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                             if char.Humanoid.Health < 2000 then
                                 fastpos(v.HumanoidRootPart.CFrame * CFrame.new(0, 300, 0))
@@ -6780,7 +6780,7 @@ spawn(function()
             local rootPart = cursedCaptain.HumanoidRootPart
             if humanoid.Health > 0 then
                 rootPart.CanCollide = false
-                humanoid.WalkSpeed = 0
+                humanoid.WalkSpeed = 10
                 rootPart.Size = Vector3.new(50,50,50)
                 repeat
                     task.wait(0.05)
@@ -6889,7 +6889,7 @@ task.spawn(function()
                                     AutoHaki()
                                     EquipWeapon(getgenv().SelectWeapon)
                                     v.HumanoidRootPart.CanCollide = false
-                                    v.Humanoid.WalkSpeed = 0
+                                    v.Humanoid.WalkSpeed = 10
                                     v.Head.CanCollide = false
                                     topos(v.HumanoidRootPart.CFrame * Pos)
                                     getgenv().BonesBring = true
@@ -7223,7 +7223,7 @@ spawn(function()
                                 if v:FindFirstChild("Head") then
                                     v.Head.CanCollide = false
                                 end
-                                humanoid.WalkSpeed = 0
+                                humanoid.WalkSpeed = 10
                                 sethiddenproperty(player, "SimulationRadius", math.huge)
                                 while getgenv().AutoKillPlayerAfterTrial and humanoid.Health > 0 and v.Parent and rootPart and humanoid do
                                     task.wait(0.1)
@@ -7448,7 +7448,7 @@ spawn(function()
                                                 enemy.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                                                 enemy.HumanoidRootPart.Transparency = 1
                                                 enemy.Humanoid.JumpPower = 0
-                                                enemy.Humanoid.WalkSpeed = 0
+                                                enemy.Humanoid.WalkSpeed = 10
                                                 enemy.HumanoidRootPart.CanCollide = false
                                                 enemy.HumanoidRootPart.CFrame = hrp.CFrame * CFrame.new(0, 20, 0)                                                
                                                 topos(CFrame.new(-10160.787, 138.662, 5955.031))
@@ -7517,7 +7517,7 @@ task.spawn(function()
                         end
                         Buso()
                         v.HumanoidRootPart.CanCollide = false
-                        v.Humanoid.WalkSpeed = 0
+                        v.Humanoid.WalkSpeed = 10
                         topos(v.HumanoidRootPart.CFrame * CFrame.new(0,30,0))
                         if syn and not getgenv().SimulationSet then
                             sethiddenproperty(player, "SimulationRadius", math.huge)
@@ -7591,7 +7591,7 @@ spawn(function()
                                 repeat
                                     task.wait(0.1)
                                     rootPart.CanCollide = false
-                                    humanoid.WalkSpeed = 0
+                                    humanoid.WalkSpeed = 10
                                     if (rootPart.Position - hrp.Position).Magnitude > 5 then
                                         topos(rootPart.CFrame * Pos)
                                     end
@@ -7675,7 +7675,7 @@ spawn(function()
                                             AutoHaki()
                                             EquipWeapon(getgenv().SelectWeapon)
                                             mobLeader.HumanoidRootPart.CanCollide = false
-                                            mobLeader.Humanoid.WalkSpeed = 0
+                                            mobLeader.Humanoid.WalkSpeed = 10
                                             topos(mobLeader.HumanoidRootPart.CFrame)
                                             game:GetService("VirtualUser"):CaptureController()
                                             game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
@@ -7705,7 +7705,7 @@ spawn(function()
                             saberExpert.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
                             saberExpert.HumanoidRootPart.Transparency = 1
                             saberExpert.Humanoid.JumpPower = 0
-                            saberExpert.Humanoid.WalkSpeed = 0
+                            saberExpert.Humanoid.WalkSpeed = 10
                             saberExpert.HumanoidRootPart.CanCollide = false
                             game:GetService("VirtualUser"):CaptureController()
                             game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
@@ -8079,7 +8079,7 @@ Toggle:OnChanged(function(v)
 end)
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
-getgenv().WalkSpeed = 16
+getgenv().WalkSpeed = 10
 Toggle = PVP:AddToggle("Toggle", {
     Title = "Change WalkSpeed",
     Default = false
