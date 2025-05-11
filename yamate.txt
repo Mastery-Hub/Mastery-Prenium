@@ -1443,19 +1443,25 @@ Window = Fluent:CreateWindow({
     Theme = "Light",
     MinimizeKey = Enum.KeyCode.LeftControl 
 })
-Server = Window:AddTab({ Title = "Tab Status And Server", Icon = "" })
+Info = Window:AddTab({ Title = "Info", Icon = "" })
 Time = Server:AddParagraph({
-    Title = "Time Zone",
+    Title = "Info Qminh (Kenny)",
     Content = ""
 })
-Server:AddButton({
-    Title = "Copy Link Discord",
+Info = Window:AddTab({ Title = "Tab Info", Icon = "" })
+Info:AddButton({
+    Title = "Discord",
     Callback = function()
-        if tick() - lastCopyTime >= copyCooldown then
-            lastCopyTime = tick()
-            setclipboard("https://discord.gg/d9AH96mJcc")
-            print("Copied!")
-        end
+        setclipboard("https://discord.gg/d9AH96mJcc")
+    end
+})
+Info:AddButton({
+    Title = "Shop Roblox",
+    Callback = function()
+        setclipboard("https://shoproblox29.cfd/")
+    end
+})
+
 Shop = Window:AddTab({ Title = "Tab Shop", Icon = "" })
 sex = {
     "WildDares",
