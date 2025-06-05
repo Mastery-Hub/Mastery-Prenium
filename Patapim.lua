@@ -3417,7 +3417,7 @@ end
 
 local library = {}
 
-_G.Color = Color3.fromRGB(0, 0, 128) 
+_G.Color = Color3.fromRGB(174, 198, 207) 
 _G.imageLogo = "rbxassetid://131401699980168"
 _G.Logo = "rbxassetid://131401699980168"
 _G.NameHub = "Made By Qminh(kenny)" -- ชื่อ Hub
@@ -3456,7 +3456,7 @@ ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.120833337 - 0.10, 0, 0.0952890813 + 0.01, 0)
 ImageButton.Size = UDim2.new(0, 40, 0, 40)
 ImageButton.Draggable = true
-ImageButton.Image = "rbxassetid://100666805146072"
+ImageButton.Image = "rbxassetid://131401699980168"
 
 UICorner.CornerRadius = UDim.new(1, 0)
 UICorner.Parent = ImageButton
@@ -3665,7 +3665,7 @@ local Disc_Title = Instance.new("TextLabel")
 Discord.Name = "Discord"
 Discord.Parent = Main
 Discord.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Discord.BackgroundTransparency = 1 -- Làm cho nền trong suốt
+Discord.BackgroundTransparency = 50 -- Làm cho nền trong suốt
 Discord.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Discord.BorderSizePixel = 0
 Discord.Position = UDim2.new(0, 430, 0, 16)
@@ -4039,7 +4039,7 @@ UICorner.Parent = ImageButton
 			Top_2.Parent = Section
 			Top_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 			Top_2.BackgroundTransparency = 1.000
-			Top_2.BorderColor3 = Color3.fromRGB(27, 42, 53)
+			Top_2.BorderColor3 = Color3.fromRGB(174, 198, 207)
 			Top_2.Size = UDim2.new(0, 238, 0, 35)
 
 			Line.Name = "Line"
@@ -4173,12 +4173,12 @@ UICorner.Parent = ImageButton
 
 				Button_2.Name = "Button"
 				Button_2.Parent = SectionContainer
-				Button_2.BackgroundColor3 = Color3.fromRGB(0, 0, 128)
+				Button_2.BackgroundColor3 = Color3.fromRGB(174, 198, 207)
 				Button_2.Size = UDim2.new(0.975000024, 0, 0, 25)
 				Button_2.ZIndex = 16
 
 				if default then
-					Button_2.BackgroundColor3 = Color3.fromRGB(0, 0, 128)
+					Button_2.BackgroundColor3 = Color3.fromRGB(174, 198, 207)
 				else
 					Button_2.BackgroundColor3 = _G.Color
 				end
@@ -4224,7 +4224,7 @@ UICorner.Parent = ImageButton
 						Button_2,
 						TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 						{
-							BackgroundColor3 = state and _G.Color or Color3.fromRGB(0, 0, 128)
+							BackgroundColor3 = state and _G.Color or Color3.fromRGB(174, 198, 207)
 						}
 					):Play()
 					callback(default)
@@ -4235,7 +4235,7 @@ UICorner.Parent = ImageButton
 						Button_2,
 						TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
 						{
-							BackgroundColor3 = state and Color3.fromRGB(0, 0, 128) or _G.Color
+							BackgroundColor3 = state and Color3.fromRGB(174, 198, 207) or _G.Color
 						}
 					):Play()
 					callback(state)
@@ -4674,7 +4674,7 @@ UICorner.Parent = ImageButton
 					local UICorner_9 = Instance.new("UICorner")
 					_5.Name = Text
 					_5.Parent = Scroll_Items
-					_5.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+					_5.BackgroundColor3 = Color3.fromRGB(174, 198, 207)
 					_5.BorderSizePixel = 0
 					_5.ClipsDescendants = true
 					_5.Size = UDim2.new(1, -10, 0, 20)
